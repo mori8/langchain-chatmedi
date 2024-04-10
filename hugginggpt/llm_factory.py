@@ -2,13 +2,13 @@ import logging
 from collections import namedtuple
 
 import tiktoken
-from langchain import OpenAI
+from langchain.chat_models import ChatOpenAI as OpenAI
 
-LLM_NAME = "text-davinci-003"
+LLM_NAME = "gpt-3.5-turbo"
 # Encoding for text-davinci-003
-ENCODING_NAME = "p50k_base"
+ENCODING_NAME = "cl100k_base"
 ENCODING = tiktoken.get_encoding(ENCODING_NAME)
-# Max input tokens for text-davinci-003
+# Max input tokens for gpt-3.5-turbo
 LLM_MAX_TOKENS = 4096
 
 # As specified in huggingGPT paper

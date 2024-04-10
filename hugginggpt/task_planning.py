@@ -2,7 +2,9 @@ import logging
 
 from langchain import LLMChain
 from langchain.llms.base import BaseLLM
+from langchain.chat_models import ChatOpenAI as OpenAI
 from langchain.prompts import load_prompt
+from langchain.prompts import PromptTemplate
 
 from hugginggpt.exceptions import TaskPlanningException, wrap_exceptions
 from hugginggpt.history import ConversationHistory
@@ -27,9 +29,12 @@ def plan_tasks(
     )
     llm_chain = LLMChain(prompt=task_planning_prompt_template, llm=llm)
     history_truncated = truncate_history(history)
+    logger.info(f"user input: {user_input}")
     output = llm_chain.predict(
-        user_input=user_input, history=history_truncated, stop=["<im_end>"]
+        user_input=user_input, history=history_truncated,
+        stop=["<im_end>"]
     )
+
     logger.info(f"Task planning raw output: {output}")
     tasks = parse_tasks(output)
     return tasks

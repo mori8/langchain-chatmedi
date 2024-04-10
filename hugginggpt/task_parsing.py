@@ -80,6 +80,7 @@ class Tasks(BaseModel):
 @wrap_exceptions(TaskParsingException, "Failed to parse tasks")
 def parse_tasks(tasks_str: str) -> list[Task]:
     """Parses tasks from task planning json string"""
+    # print("tasks_str:", tasks_str)
     if tasks_str == "[]":
         raise ValueError("Task string empty, cannot parse")
     logger.info(f"Parsing tasks string: {tasks_str}")

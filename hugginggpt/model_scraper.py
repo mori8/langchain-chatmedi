@@ -68,6 +68,7 @@ async def filter_available_models(candidates, session: ClientSession):
             for c in candidates
         ]
     results = await asyncio.gather(*tasks)
+    # status 대신 state 사용
     available_model_ids = [model_id for model_id, status in results if status]
     return [c for c in candidates if c["id"] in available_model_ids]
 
@@ -87,4 +88,4 @@ async def model_status(model_id: str, session: ClientSession) -> tuple[str, bool
 
 
 def model_is_available(status: int, json_response: dict[str, any]):
-    return status == 200 and "loaded" in json_response and json_response["loaded"]
+    return status == 200 and (("loaded" in json_response and json_response["loaded"]) or ("state" in json_response and json_response["state"] == "Loadable"))
