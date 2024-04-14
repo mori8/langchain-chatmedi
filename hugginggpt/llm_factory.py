@@ -65,7 +65,7 @@ def create_llms() -> LLMs:
 
 
 def get_token_ids_for_task_parsing() -> list[int]:
-    text = """{"task": "text-classification",  "token-classification", "text2text-generation", "summarization", "translation",  "question-answering", "conversational", "text-generation", "sentence-similarity", "tabular-classification", "object-detection", "image-classification", "image-to-image", "image-to-text", "text-to-image", "visual-question-answering", "document-question-answering", "image-segmentation", "text-to-speech", "automatic-speech-recognition", "audio-to-audio", "audio-classification", "args", "text", "path", "dep", "id", "<GENERATED>-"}"""
+    text = """{"task": "question-answering-about-medical-domain", "visual-question-answering-about-medical-domain", "text-to-image", "args", "text", "path", "dep", "id", "<GENERATED>-"}"""
     res = ENCODING.encode(text)
     res = list(set(res))
     return res

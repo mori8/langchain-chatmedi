@@ -378,22 +378,9 @@ class AudioClassification:
 
 
 HUGGINGFACE_TASKS = {
-    "question-answering": QuestionAnswering,
-    "sentence-similarity": SentenceSimilarity,
-    "text-classification": TextClassification,
-    "token-classification": TokenClassification,
-    "visual-question-answering": VisualQuestionAnswering,
-    "document-question-answering": DocumentQuestionAnswering,
+    "question-answering-about-medical-domain": QuestionAnswering,
+    "visual-question-answering-about-medical-domain": VisualQuestionAnswering,
     "text-to-image": TextToImage,
-    "image-segmentation": ImageSegmentation,
-    "image-to-image": ImageToImage,
-    "object-detection": ObjectDetection,
-    "image-classification": ImageClassification,
-    "image-to-text": ImageToText,
-    "text-to-speech": TextToSpeech,
-    "automatic-speech-recognition": AutomaticSpeechRecognition,
-    "audio-to-audio": AudioToAudio,
-    "audio-classification": AudioClassification,
 }
 
 

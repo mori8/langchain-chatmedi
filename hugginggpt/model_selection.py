@@ -62,7 +62,7 @@ async def select_model(
     top_k_models = await get_top_k_models(
         task=task.task, top_k=5, max_description_length=100, session=session
     )
-
+    # TODO: 여기 수정 필요
     if task.task in [
         "summarization",
         "translation",
