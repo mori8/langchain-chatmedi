@@ -57,7 +57,11 @@ def infer_openai(task: Task, llm: BaseLLM):
 
 def infer_huggingface(task: Task, model_id: str, session: requests.Session):
     logger.info("Starting huggingface inference")
+
     url = HUGGINGFACE_INFERENCE_API_URL + model_id
+    if model_id == "BioMistral/BioMistral-7B":
+        url = "https://kyiu7f36yx8hombe.us-east-1.aws.endpoints.huggingface.cloud"
+    
     huggingface_task = create_huggingface_task(task=task)
     data = huggingface_task.inference_inputs
     headers = get_hf_headers()
@@ -377,10 +381,23 @@ class AudioClassification:
         return response.json()
 
 
+class TextGeneration:
+    def __init__(self, task: Task):
+        self.task = task
+
+    @property
+    def inference_inputs(self):
+        return self.task.args["text"]
+
+    def parse_response(self, response):
+        return response.json()
+
+
 HUGGINGFACE_TASKS = {
     "question-answering-about-medical-domain": QuestionAnswering,
     "visual-question-answering-about-medical-domain": VisualQuestionAnswering,
     "text-to-image": TextToImage,
+    "medical-image-segmentation": ImageSegmentation,
 }
 
 
