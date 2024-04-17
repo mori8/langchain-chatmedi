@@ -17,7 +17,8 @@ from hugginggpt.resources import (
     save_audio,
     save_image,
 )
-from main import compute
+from main import compute, planning_task_and_selecting_model, infer_model_and_generate_response
+
 
 load_dotenv()
 setup_logging()
@@ -73,16 +74,37 @@ class Client:
             return {}, messages
         try:
             user_input = self.last_user_input
-            response, task_summaries = compute(
+            # TODO: compute 두단계로 분리
+            # response, task_summaries = compute(
+            #     user_input=user_input,
+            #     history=self.llm_history,
+            #     llms=self.llms,
+            # )
+
+            tasks, hf_models = planning_task_and_selecting_model(
                 user_input=user_input,
                 history=self.llm_history,
                 llms=self.llms,
             )
+
+            messages = display_message(
+                role="assistant", message=str(hf_models), messages=messages, save_media=False
+            )
+
+            response, task_summaries = infer_model_and_generate_response(
+                user_input=user_input,
+                tasks=tasks,
+                llms=self.llms,
+                hf_models=hf_models,
+            )
+
+            # TODO: 메세지는 여기서 띄움
             messages = display_message(
                 role="assistant", message=response, messages=messages, save_media=False
             )
             self.llm_history.add(role="user", content=user_input)
             self.llm_history.add(role="assistant", content="")
+
             return task_summaries, messages
         except Exception as e:
             logger.exception("")
@@ -98,16 +120,7 @@ class Client:
 
 css = ".json {height: 527px; overflow: scroll;} .json-holder {height: 527px; overflow: scroll;}"
 with gr.Blocks(css=css) as demo:
-    gr.Markdown("<h1><center>langchain-HuggingGPT</center></h1>")
-    gr.Markdown(
-        "<p align='center'><img src='https://i.ibb.co/qNH3Jym/logo.png' height='25' width='95'></p>"
-    )
-    gr.Markdown(
-        "<p align='center' style='font-size: 20px;'>A lightweight implementation of <a href='https://arxiv.org/abs/2303.17580'>HuggingGPT</a> with <a href='https://docs.langchain.com/docs/'>langchain</a>. No local inference, only models available on the <a href='https://huggingface.co/inference-api'>Hugging Face Inference API</a> are used.</p>"
-    )
-    gr.HTML(
-        """<center><a href="https://huggingface.co/spaces/camillevanhoffelen/langchain-HuggingGPT?duplicate=true"><img src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a>Duplicate the Space and run securely with your OpenAI API Key and Hugging Face Token</center>"""
-    )
+    gr.Markdown("<h1><center>ChatMini</center></h1>")
     if not OPENAI_KEY:
         with gr.Row().style():
             with gr.Column(scale=0.85):
@@ -179,10 +192,9 @@ with gr.Blocks(css=css) as demo:
 
     gr.Examples(
         examples=[
-            "Draw me a sheep",
-            "Write a poem about sheep, then read it to me",
-            "Transcribe the audio file found at /audios/499e.flac. Then tell me how similar the transcription is to the following sentence: Sheep are nice.",
-            "Tell me a joke about a sheep, then illustrate it by generating an image",
+            "What are the common symptoms of type 2 diabetes?",
+            "A patient has been experiencing chest pain and shortness of breath. Based on these symptoms, what could be the possible diagnosis?",
+            "Generate an image of a healthy lung based on the following description: 'A normal chest X-ray showing clear lung fields without any abnormalities.'"
         ],
         inputs=txt,
     )
