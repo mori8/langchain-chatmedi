@@ -252,4 +252,4 @@ def extract_medias(message: str):
     return image_urls, audio_urls
 
 
-demo.launch()
+demo.launch(root_path="/")
