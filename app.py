@@ -193,7 +193,7 @@ with gr.Blocks(css=css) as demo:
     gr.Examples(
         examples=[
             "What are the common symptoms of type 2 diabetes?",
-            "A patient has been experiencing chest pain and shortness of breath. Based on these symptoms, what could be the possible diagnosis?",
+            "Mark the lesion location on the image and describe what's wrong. https://media.npr.org/assets/img/2014/06/24/mammography-2-copy_wide-9975cfd8e9bda3fe84f191d182ffdd8935fb9862.jpg",
             "Generate an image of a healthy lung based on the following description: 'A normal chest X-ray showing clear lung fields without any abnormalities.'"
         ],
         inputs=txt,

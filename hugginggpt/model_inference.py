@@ -216,7 +216,7 @@ class ImageSegmentation:
                     random.randint(100, 255),
                     random.randint(100, 255),
                     random.randint(100, 255),
-                    155,
+                    55,
                 )
             )
         predicted_results = []
